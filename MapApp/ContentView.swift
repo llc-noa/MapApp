@@ -8,14 +8,36 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var inputText:String = ""
+    @State var displaySearchKey:String = ""
+    @State var displayMapType:MapType = .standard
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            TextField("キーワード",text: $inputText,prompt: Text("キーワードを入力してください"))
+                .onSubmit {
+                    displaySearchKey = inputText
+                }
+                .padding()
+            ZStack(alignment: .bottomTrailing){
+                Mapview(searchKey: displaySearchKey,mapType:displayMapType)
+                Button{
+                    if displayMapType == .standard{
+                        displayMapType = .satellite
+                    }
+                    else if displayMapType == .satellite{
+                        displayMapType = .hybrid
+                    }else{
+                        displayMapType = .standard
+                    }
+                }label: {
+                    Image(systemName: "map")
+                        .resizable()
+                        .frame(width: 35.0,height: 35.0)
+                }
+                .padding(.trailing,20.0)
+                .padding(.bottom,30.0)
+            }
         }
-        .padding()
     }
 }
 
